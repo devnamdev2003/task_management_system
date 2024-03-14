@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Category List</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+  </head>
+  <body>
+    <!-- Message display section -->
+
+    <div class="container mt-5">
+      <div class="text-center">
+        <h2>Categories</h2>
+      </div>
+      <br>
+
+      <a href="{% url 'create_category' %}" class="btn btn-primary mb-3">Create Category</a> <!-- Button to create category -->
+      <a href="{% url 'task_chart' %}" class="btn btn-info mb-3">View task Chart</a> <!-- Button to view task chart -->
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Actions</th> <!-- Column for actions -->
+          </tr>
+        </thead>
+        <tbody>
+          {% for category in categories %}
+            <tr>
+              <td>
+                <a href="{% url 'category_tasks' category.id %}">{{ category.name }}</a>
+              </td> <!-- Link to category_tasks page -->
+              <td>
+                <form method="post" action="{% url 'delete_category' category.id %}" style="display: inline;">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-danger btn-sm">Delete</button> <!-- Button to delete category -->
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <script>
+        // JavaScript function to display the message in a popup form
+        {% if messages %}
+            {% for message in messages %}
+                alert("{{ message }}");
+            {% endfor %}
+        {% endif %}
+    </script>
+    <!-- Bootstrap JS (Optional - for certain Bootstrap features like modals) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>

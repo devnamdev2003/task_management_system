@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add task</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2  class="text-center">Add task</h2>
+        <br>
+        <form method="post" action="{% url 'create_task' %}" onsubmit="return validateForm()">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="taskName">task Name:</label>
+                <input type="text" class="form-control" id="taskName" name="name" placeholder="Enter task name" required>
+            </div>
+            <div class="form-group">
+                <label for="taskCategory">Category:</label>
+                <select class="form-control" id="taskCategory" name="category" required>
+                    <option value="">Select category</option>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}">{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="startDate">Start Date:</label>
+                <input type="datetime-local" class="form-control" id="startDate" name="start_date" required>
+            </div>
+            <div class="form-group">
+                <label for="endDate">End Date:</label>
+                <input type="datetime-local" class="form-control" id="endDate" name="end_date" required>
+            </div>
+            <div class="form-group">
+                <label for="priority">Priority:</label>
+                <input type="number" class="form-control" id="priority" name="priority" min="1" value="1" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="location">Location:</label>
+                <input type="text" class="form-control" id="location" name="location" placeholder="Enter task location">
+            </div>
+            <div class="form-group">
+                <label for="organizer">Organizer:</label>
+                <input type="text" class="form-control" id="organizer" name="organizer" placeholder="Enter task organizer">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS (Optional - for certain Bootstrap features like dropdowns, modals, etc.) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function validateForm() {
+            var startDate = document.getElementById("startDate").value;
+            var endDate = document.getElementById("endDate").value;
+
+            if (new Date(startDate) >= new Date(endDate)) {
+                alert("End date must be after the start date.");
+                return false;
+            }
+            return true;
+        }
+    </script>
+</body>
+</html>

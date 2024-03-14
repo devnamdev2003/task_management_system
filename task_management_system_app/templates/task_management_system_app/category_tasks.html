@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ category.name }} tasks</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+</head>
+<body>
+  <div class="container mt-5">
+    <h2 class="text-center">{{ category.name }} tasks</h2>
+    <br>
+    <div class="mb-3">
+      <a href="{% url 'create_task' %}" class="btn btn-primary">Add New task</a> <!-- Button to add new task -->
+      <a href="{% url 'category_list' %}" class="btn btn-secondary ml-2">Back to Categories</a> <!-- Button to go back to categories -->
+    </div>
+    <table id="taskTable" class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Start Date</th>
+          <th>Time Left</th>
+          <th>Priority <button class="btn btn-link" onclick="sortByPriority()">&#x25B2;</button></th> <!-- Button for sorting by priority -->
+          <th>Actions</th> <!-- Column for actions -->
+        </tr>
+      </thead>
+      <tbody>
+        {% for task in tasks %}
+          <tr>
+            <td>{{ task.name }}</td>
+            <td>{{ task.start_date }}</td>
+            <td>
+              <div id="countdown_{{ task.id }}" class="countdown-timer"></div>
+            </td>
+            <td>{{ task.priority }}</td>
+            <td>
+              <a href="{% url 'update_task' task.id %}" class="btn btn-primary btn-sm">Update</a> <!-- Button to update task -->
+              <form method="post" action="{% url 'delete_task' task.id %}" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-sm">Delete</button> <!-- Button to delete task -->
+              </form>
+              <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#taskModal_{{ task.id }}">Details</button> <!-- Button to open modal -->
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal for task details -->
+  {% for task in tasks %}
+    <div class="modal fade" id="taskModal_{{ task.id }}" tabindex="-1" role="dialog" aria-labelledby="taskModalLabel_{{ task.id }}" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="taskModalLabel_{{ task.id }}">{{ task.name }}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          </div>
+          <div class="modal-body">
+            <p>
+              <strong>Name:</strong> {{ task.name }}
+            </p>
+            <p>
+              <strong>Category:</strong> {{ task.category.name }}
+            </p>
+            <p>
+              <strong>Start Date:</strong> {{ task.start_date }}
+            </p>
+            <p>
+              <strong>End Date:</strong> {{ task.end_date }}
+            </p>
+            <p>
+              <strong>Priority:</strong> {{ task.priority }}
+            </p>
+            <p>
+              <strong>Description:</strong> {{ task.description }}
+            </p>
+            <p>
+              <strong>Location:</strong> {{ task.location }}
+            </p>
+            <p>
+              <strong>Organizer:</strong> {{ task.organizer }}
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+
+  <!-- JavaScript to update countdown timers and sorting -->
+  <script>
+    function sortByPriority() {
+      var table, rows, switching, i, x, y, shouldSwitch;
+      table = document.getElementById("taskTable");
+      switching = true;
+      while (switching) {
+        switching = false;
+        rows = table.getElementsByTagName("tr");
+        for (i = 1; i < (rows.length - 1); i++) {
+          shouldSwitch = false;
+          x = rows[i].getElementsByTagName("td")[3]; // Index of Priority column
+          y = rows[i + 1].getElementsByTagName("td")[3];
+          if (parseInt(x.innerHTML) < parseInt(y.innerHTML)) {
+            shouldSwitch = true;
+            break;
+          }
+        }
+        if (shouldSwitch) {
+          rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+          switching = true;
+        }
+      }
+    }
+
+    // Function to update countdown timer for each task
+    function updateCountdownTimers() {
+      {% for task in tasks %}
+      // Get the start date of the task and convert it to a JavaScript Date object
+      var startDate = new Date('{{ task.start_date|date:"Y/m/d H:i:s" }}');
+      var now = new Date();
+
+      // Calculate the time difference between now and the start date
+      var timeDiff = startDate - now;
+
+      // If the task has not started yet, display the countdown timer
+      if (timeDiff > 0) {
+        var days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+
+        // Display the countdown timer in the format: DD:HH:MM:SS
+        document.getElementById('countdown_{{ task.id }}').innerText = days + "d " + hours + "h "
+          + minutes + "m " + seconds + "s ";
+      } else {
+        // If the task has already started, display a message indicating that it has started
+        document.getElementById('countdown_{{ task.id }}').innerText = "task has started";
+      }
+      {% endfor %}
+    }
+
+    // Call the updateCountdownTimers function every second to update the countdown timers in real-time
+    setInterval(updateCountdownTimers, 1000);
+  </script>
+
+  <!-- Bootstrap JS (Optional - for certain Bootstrap features like modals) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
