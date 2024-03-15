@@ -1,3 +1,5 @@
+from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.shortcuts import render
 from django.shortcuts import render, get_object_or_404
@@ -8,8 +10,52 @@ from .models import Category
 
 from .models import Task
 from django.urls import reverse
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from .models import CustomUser
 
 
+class RegistrationForm(UserCreationForm):
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'password1', 'password2']
+
+
+class LoginForm(AuthenticationForm):
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'password']
+
+
+def register(request):
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('category_list')
+    else:
+        form = RegistrationForm()
+    return render(request, 'task_management_system_app/register.html', {'form': form})
+
+
+def LogoutPage(request):
+    logout(request)
+    return redirect("login")
+
+
+def user_login(request):
+    if request.method == 'POST':
+        form = LoginForm(request, request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect('category_list')
+    else:
+        form = LoginForm()
+    return render(request, 'task_management_system_app/login.html', {'form': form})
+
+
+@login_required
 def delete_task(request, task_id):
     if request.method == 'POST':
         task = Task.objects.get(id=task_id)
@@ -17,6 +63,7 @@ def delete_task(request, task_id):
     return redirect(reverse('category_list'))
 
 
+@login_required
 def create_task(request):
     if request.method == 'POST':
         # Retrieve data from the POST request
@@ -51,6 +98,7 @@ def create_task(request):
         return render(request, 'task_management_system_app/create_task.html', {'categories': categories})
 
 
+@login_required
 def update_task(request, task_id):
     task = Task.objects.get(pk=task_id)
     if request.method == 'POST':
@@ -69,11 +117,13 @@ def update_task(request, task_id):
         return render(request, 'task_management_system_app/update_task.html', {'task': task})
 
 
+@login_required
 def category_list(request):
     categories = Category.objects.all()
     return render(request, 'task_management_system_app/category_list.html', {'categories': categories})
 
 
+@login_required
 def create_category(request):
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -82,6 +132,7 @@ def create_category(request):
     return render(request, 'task_management_system_app/create_category.html')
 
 
+@login_required
 def delete_category(request, category_id):
     category = Category.objects.get(pk=category_id)
     if category.task_set.exists():
@@ -93,18 +144,20 @@ def delete_category(request, category_id):
     return redirect('category_list')
 
 
+@login_required
 def category_tasks(request, category_id):
     category = get_object_or_404(Category, pk=category_id)
     tasks = category.task_set.all()
     return render(request, 'task_management_system_app/category_tasks.html', {'category': category, 'tasks': tasks})
 
 
+@login_required
 def task_chart(request):
     categories = Category.objects.all()
     pending_counts = {}
     for category in categories:
         pending_counts[category.name] = Task.objects.filter(
             category=category,
-            start_date__gt=timezone.now() 
+            start_date__gt=timezone.now()
         ).count()
     return render(request, 'task_management_system_app/task_chart.html', {'pending_counts': pending_counts})
