@@ -1,200 +1,94 @@
 {
     "categories": [
-        {
-            "name": "Work",
-            "tasks": [
-                {
-                    "name": "Prepare quarterly report",
-                    "start_date": "2024-03-14T09:00:00",
-                    "end_date": "2024-03-20T17:00:00",
-                    "priority": 2,
-                    "description": "Compile and analyze data for the quarterly report.",
-                    "location": "Office Building, 123 Main St, City",
-                    "organizer": "John Doe"
-                },
-                {
-                    "name": "Meeting with clients",
-                    "start_date": "2024-03-16T13:00:00",
-                    "end_date": "2024-03-16T15:00:00",
-                    "priority": 3,
-                    "description": "Discuss project updates and address client concerns.",
-                    "location": "Virtual meeting",
-                    "organizer": "Jane Smith"
-                },
-                {
-                    "name": "Code review",
-                    "start_date": "2024-03-18T10:00:00",
-                    "end_date": "2024-03-18T12:00:00",
-                    "priority": 1,
-                    "description": "Review recent code changes and provide feedback.",
-                    "location": "Meeting Room 2B",
-                    "organizer": "Alex Johnson"
-                }
-            ]
-        },
-        {
-            "name": "Personal",
-            "tasks": [
-                {
-                    "name": "Grocery shopping",
-                    "start_date": "2024-03-14T18:00:00",
-                    "end_date": "2024-03-14T19:00:00",
-                    "priority": 5,
-                    "description": "Buy groceries for the week.",
-                    "location": "Local supermarket",
-                    "organizer": "Your Name"
-                },
-                {
-                    "name": "Gym workout",
-                    "start_date": "2024-03-16T07:00:00",
-                    "end_date": "2024-03-16T08:00:00",
-                    "priority": 4,
-                    "description": "Cardio and strength training session.",
-                    "location": "Fitness Center, 456 Elm St, City",
-                    "organizer": "Your Name"
-                },
-                {
-                    "name": "Movie night",
-                    "start_date": "2024-03-18T19:00:00",
-                    "end_date": "2024-03-18T22:00:00",
-                    "priority": 3,
-                    "description": "Watch a movie with friends.",
-                    "location": "Home",
-                    "organizer": "Your Name"
-                },
-                {
-                    "name": "Read a book",
-                    "start_date": "2024-03-20T20:00:00",
-                    "end_date": "2024-03-20T21:00:00",
-                    "priority": 2,
-                    "description": "Spend an hour reading a new book.",
-                    "location": "Comfy chair",
-                    "organizer": "Your Name"
-                }
-            ]
-        },
-        {
-            "name": "Study",
-            "tasks": [
-                {
-                    "name": "Study for exam",
-                    "start_date": "2024-03-14T19:00:00",
-                    "end_date": "2024-03-14T22:00:00",
-                    "priority": 4,
-                    "description": "Review notes and practice exam questions.",
-                    "location": "Library",
-                    "organizer": "Student Name"
-                },
-                {
-                    "name": "Complete assignment",
-                    "start_date": "2024-03-16T16:00:00",
-                    "end_date": "2024-03-16T18:00:00",
-                    "priority": 3,
-                    "description": "Finish writing and submit assignment.",
-                    "location": "Dorm Room",
-                    "organizer": "Student Name"
-                },
-                {
-                    "name": "Group study session",
-                    "start_date": "2024-03-18T14:00:00",
-                    "end_date": "2024-03-18T17:00:00",
-                    "priority": 2,
-                    "description": "Collaborate with classmates on project work.",
-                    "location": "Study Room",
-                    "organizer": "Student Name"
-                },
-                {
-                    "name": "Review lecture notes",
-                    "start_date": "2024-03-20T16:00:00",
-                    "end_date": "2024-03-20T18:00:00",
-                    "priority": 1,
-                    "description": "Go over lecture slides and summarize key points.",
-                    "location": "Cafeteria",
-                    "organizer": "Student Name"
-                }
-            ]
-        },
-        {
-            "name": "Home",
-            "tasks": [
-                {
-                    "name": "Clean the house",
-                    "start_date": "2024-03-14T11:00:00",
-                    "end_date": "2024-03-14T13:00:00",
-                    "priority": 3,
-                    "description": "Tidy up and vacuum the house.",
-                    "location": "Home",
-                    "organizer": "Family Member"
-                },
-                {
-                    "name": "Fix leaking faucet",
-                    "start_date": "2024-03-16T10:00:00",
-                    "end_date": "2024-03-16T12:00:00",
-                    "priority": 4,
-                    "description": "Call plumber to repair the faucet.",
-                    "location": "Home",
-                    "organizer": "Family Member"
-                },
-                {
-                    "name": "Mow the lawn",
-                    "start_date": "2024-03-18T14:00:00",
-                    "end_date": "2024-03-18T16:00:00",
-                    "priority": 2,
-                    "description": "Trim the grass in the backyard.",
-                    "location": "Home",
-                    "organizer": "Family Member"
-                },
-                {
-                    "name": "Family dinner",
-                    "start_date": "2024-03-20T18:00:00",
-                    "end_date": "2024-03-20T19:30:00",
-                    "priority": 1,
-                    "description": "Enjoy a meal together as a family.",
-                    "location": "Home",
-                    "organizer": "Family Member"
-                }
-            ]
-        },
-        {
-            "name": "Health",
-            "tasks": [
-                {
-                    "name": "Doctor's appointment",
-                    "start_date": "2024-03-14T15:00:00",
-                    "end_date": "2024-03-14T16:00:00",
-                    "priority": 2,
-                    "description": "Routine check-up with the family doctor.",
-                    "location": "Medical Center",
-                    "organizer": "Your Name"
-                },
-                {
-                    "name": "Dentist appointment",
-                    "start_date": "2024-03-16T09:00:00",
-                    "end_date": "2024-03-16T10:00:00",
-                    "priority": 3,
-                    "description": "Dental check-up and cleaning.",
-                    "location": "Dental Clinic",
-                    "organizer": "Your Name"
-                },
-                {
-                    "name": "Exercise",
-                    "start_date": "2024-03-18T07:30:00",
-                    "end_date": "2024-03-18T08:30:00",
-                    "priority": 4,
-                    "description": "Morning jog around the neighborhood.",
-                    "location": "Around the neighborhood",
-                    "organizer": "Your Name"
-                },
-                {
-                    "name": "Healthy meal preparation",
-                    "start_date": "2024-03-20T12:00:00",
-                    "end_date": "2024-03-20T13:00:00",
-                    "priority": 5,
-                    "description": "Cook a nutritious lunch for the week.",
-                    "location": "Home",
-                    "organizer": "Your Name"
-                }
-            ]
-        }
+      {
+        "name": "Work"
+      },
+      {
+        "name": "Personal"
+      }
+    ],
+    "users": [
+      {
+        "username": "user1",
+        "tasks": [
+          {
+            "name": "Complete project report",
+            "category": "Work",
+            "start_date": "2024-03-27T08:00:00",
+            "end_date": "2024-04-10T17:00:00",
+            "priority": 2,
+            "description": "Prepare and finalize the project report for submission."
+          },
+          {
+            "name": "Buy groceries",
+            "category": "Personal",
+            "start_date": "2024-03-29T10:00:00",
+            "end_date": "2024-03-29T12:00:00",
+            "priority": 1,
+            "description": "Purchase groceries for the week."
+          }
+        ]
+      },
+      {
+        "username": "user2",
+        "tasks": [
+          {
+            "name": "Prepare presentation slides",
+            "category": "Work",
+            "start_date": "2024-03-28T09:00:00",
+            "end_date": "2024-04-05T16:00:00",
+            "priority": 3,
+            "description": "Create slides for the upcoming presentation."
+          },
+          {
+            "name": "Attend yoga class",
+            "category": "Personal",
+            "start_date": "2024-03-29T18:00:00",
+            "end_date": "2024-03-29T19:00:00",
+            "priority": 1,
+            "description": "Participate in the weekly yoga session."
+          }
+        ]
+      },
+      {
+        "username": "user3",
+        "tasks": [
+          {
+            "name": "Review project proposal",
+            "category": "Work",
+            "start_date": "2024-03-28T13:00:00",
+            "end_date": "2024-04-04T15:00:00",
+            "priority": 2,
+            "description": "Provide feedback on the project proposal draft."
+          }
+        ]
+      },
+      {
+        "username": "user4",
+        "tasks": [
+          {
+            "name": "Prepare for client meeting",
+            "category": "Work",
+            "start_date": "2024-03-27T14:00:00",
+            "end_date": "2024-03-27T16:00:00",
+            "priority": 3,
+            "description": "Gather necessary documents and materials for the client meeting."
+          }
+        ]
+      },
+      {
+        "username": "admin",
+        "tasks": [
+          {
+            "name": "Write monthly progress report",
+            "category": "Work",
+            "start_date": "2024-03-28T10:00:00",
+            "end_date": "2024-03-29T17:00:00",
+            "priority": 2,
+            "description": "Compile and summarize progress made during the month."
+          }
+        ]
+      }
     ]
-}
+  }
+  

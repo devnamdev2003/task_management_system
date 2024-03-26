@@ -1,18 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
-
-class CustomUser(AbstractUser):
-    groups = models.ManyToManyField(
-        'auth.Group',
-        related_name='customuser_set',
-        related_query_name='user'
-    )
-    user_permissions = models.ManyToManyField(
-        'auth.Permission',
-        related_name='customuser_set',
-        related_query_name='user'
-    )
-
+from django.contrib.auth.models import User
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -21,6 +8,7 @@ class Category(models.Model):
 class Task(models.Model):
     name = models.CharField(max_length=100)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    assigned_to = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tasks')
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     priority = models.IntegerField(default=1)

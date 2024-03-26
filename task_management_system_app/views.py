@@ -7,22 +7,53 @@ from django.contrib import messages
 from .models import Category, Task
 from django.shortcuts import render, redirect
 from .models import Category
-
 from .models import Task
 from django.urls import reverse
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .models import CustomUser
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.admin.views.decorators import staff_member_required
+
+from django.contrib.auth.decorators import login_required
+
+
+def is_admin(user):
+    return user.is_superuser
+
+
+admin_required = user_passes_test(lambda user: user.is_superuser)
+
+
+def user_login(request):
+    if request.method == 'POST':
+        form = LoginForm(request, request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            if user.is_superuser:  # If the user is an admin
+                return redirect('category_list')
+            else:  # If the user is a normal user
+                return redirect('user_tasks_list')
+    else:
+        form = LoginForm()
+    return render(request, 'task_management_system_app/login.html', {'form': form})
+
+
+@login_required
+def user_tasks_list(request):
+    tasks = request.user.tasks.all()
+    return render(request, 'task_management_system_app/user_tasks_list.html', {'tasks': tasks})
 
 
 class RegistrationForm(UserCreationForm):
     class Meta:
-        model = CustomUser
+        model = User
         fields = ['username', 'password1', 'password2']
 
 
 class LoginForm(AuthenticationForm):
     class Meta:
-        model = CustomUser
+        model = User
         fields = ['username', 'password']
 
 
@@ -31,8 +62,8 @@ def register(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)
-            return redirect('category_list')
+            # login(request, user)
+            return redirect('login')
     else:
         form = RegistrationForm()
     return render(request, 'task_management_system_app/register.html', {'form': form})
@@ -43,19 +74,8 @@ def LogoutPage(request):
     return redirect("login")
 
 
-def user_login(request):
-    if request.method == 'POST':
-        form = LoginForm(request, request.POST)
-        if form.is_valid():
-            user = form.get_user()
-            login(request, user)
-            return redirect('category_list')
-    else:
-        form = LoginForm()
-    return render(request, 'task_management_system_app/login.html', {'form': form})
-
-
 @login_required
+@admin_required
 def delete_task(request, task_id):
     if request.method == 'POST':
         task = Task.objects.get(id=task_id)
@@ -64,6 +84,7 @@ def delete_task(request, task_id):
 
 
 @login_required
+@admin_required
 def create_task(request):
     if request.method == 'POST':
         # Retrieve data from the POST request
@@ -75,11 +96,8 @@ def create_task(request):
         description = request.POST.get('description')
         location = request.POST.get('location')
         organizer = request.POST.get('organizer')
-
-        # Retrieve the Category object
+        assigned_to_id = request.POST.get('assigned_to')
         category = Category.objects.get(pk=category_id)
-
-        # Create the task object
         task = Task.objects.create(
             name=name,
             category=category,
@@ -88,17 +106,20 @@ def create_task(request):
             priority=priority,
             description=description,
             location=location,
-            organizer=organizer
+            organizer=organizer,
+            assigned_to_id=int(assigned_to_id)
         )
 
         # Redirect to the task list page
         return redirect('category_list')
     else:
         categories = Category.objects.all()
-        return render(request, 'task_management_system_app/create_task.html', {'categories': categories})
+        users = User.objects.all()
+        return render(request, 'task_management_system_app/create_task.html', {'categories': categories, 'users': users})
 
 
 @login_required
+@admin_required
 def update_task(request, task_id):
     task = Task.objects.get(pk=task_id)
     if request.method == 'POST':
@@ -110,6 +131,7 @@ def update_task(request, task_id):
         task.description = request.POST.get('description')
         task.location = request.POST.get('location')
         task.organizer = request.POST.get('organizer')
+        task.assigned_to_id = request.POST.get('assigned_to')
         task.save()
         return redirect('category_list')
     else:
@@ -118,12 +140,14 @@ def update_task(request, task_id):
 
 
 @login_required
+@admin_required
 def category_list(request):
     categories = Category.objects.all()
     return render(request, 'task_management_system_app/category_list.html', {'categories': categories})
 
 
 @login_required
+@admin_required
 def create_category(request):
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -133,6 +157,7 @@ def create_category(request):
 
 
 @login_required
+@admin_required
 def delete_category(request, category_id):
     category = Category.objects.get(pk=category_id)
     if category.task_set.exists():
@@ -145,6 +170,7 @@ def delete_category(request, category_id):
 
 
 @login_required
+@admin_required
 def category_tasks(request, category_id):
     category = get_object_or_404(Category, pk=category_id)
     tasks = category.task_set.all()
@@ -152,6 +178,7 @@ def category_tasks(request, category_id):
 
 
 @login_required
+@admin_required
 def task_chart(request):
     categories = Category.objects.all()
     pending_counts = {}

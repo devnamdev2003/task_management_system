@@ -8,12 +8,12 @@ from django.contrib.auth.views import LogoutView
 
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('user/', views.user_tasks_list, name='user_tasks_list'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('register/', views.register, name='register'),
     path('login/', views.user_login, name='login'),
     path("logout/", views.LogoutPage, name="logout"),
-    # path('logout/', LogoutView.as_view(next_page='/login/'), name='logout'),
-    path('admin/', admin.site.urls),
     path('', views.category_list, name='category_list'),
     path('categories/create/', views.create_category, name='create_category'),
     path('categories/<int:category_id>/',
